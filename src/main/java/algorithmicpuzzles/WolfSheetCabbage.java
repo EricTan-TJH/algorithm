@@ -2,69 +2,73 @@ package algorithmicpuzzles;
 
 import java.util.ArrayList;
 
+/**
+ * 本算法解决的问题为狼羊菜过河
+ * 一个人在河边，带着一匹狼、一只羊和一颗卷心菜。他需要用船将这三样东西运至对岸，然而，这艘船的空间有限，只容得下他自己和另一样东西（或狼或
+ * 羊或卷心菜）。若他不在场看管的话，狼就会去吃羊，羊就会去吃卷心菜。此人如何才能把这三个“乘客”都送至对岸？
+ */
 public class WolfSheetCabbage {
 
-	private static String WOLF = "WOLF";
-	private static String SHEET = "Sheet";
-	private static String CABBAGE = "Cabbage";
-	private static String MAN = "Man";
+	private final static String WOLF = "wolf";
+	private final static String SHEET = "sheet";
+	private final static String CABBAGE = "cabbage";
+	private final static String MAN = "man";
 
-	private String lastTransfer = "";
+	private static String lastTransfer = "";
+	private static ArrayList<String> source = new ArrayList<String>(4);
+	private static ArrayList<String> destination = new ArrayList<String>(4);
 
-	ArrayList<String> source = new ArrayList<String>(3);
-	ArrayList<String> destiny = new ArrayList<String>(3);
+    static{
+        source.add(MAN);
+        source.add(WOLF);
+        source.add(SHEET);
+        source.add(CABBAGE);
+    }
 
-	public void init() {
-		source.add(MAN);
-		source.add(WOLF);
-		source.add(SHEET);
-		source.add(CABBAGE);
-	}
-
-	public void transfer() {
+	public static void transfer() {
 		do {
 			forward();
 			printStatus();
-			if (destiny.size() < 4) {
+			if (destination.size() < 4) {
 				backward();
 				printStatus();
 			}
-		} while (destiny.size() < 4);
+		} while (destination.size() < 4);
 	}
 
-	public void backward() {
-		destiny.remove(MAN);
+	private static void backward() {
+		destination.remove(MAN);
 		source.add(MAN);
 
-		if (!isSomethingWillBeEatten(destiny)) {
+		if (!isSomethingWillBeEaten(destination)) {
 			return;
 		}
-		for (int i = 0; i < destiny.size(); i++) {
-			if (destiny.get(i).equals(lastTransfer)) {
+		for (int i = 0; i < destination.size(); i++) {
+			if (destination.get(i).equals(lastTransfer)) {
 				continue;
 			}
 
 			ArrayList<String> sourceSimulator = new ArrayList<String>(source);
-			ArrayList<String> destSimulator = new ArrayList<String>(destiny);
-			String toBeTransfer = destiny.get(i);
-			destSimulator.remove(toBeTransfer);
+			ArrayList<String> destinationSimulator = new ArrayList<String>(destination);
+			String toBeTransfer = destination.get(i);
+			destinationSimulator.remove(toBeTransfer);
 			sourceSimulator.add(toBeTransfer);
 
-			if (isSomethingWillBeEatten(sourceSimulator)
-					|| isSomethingWillBeEatten(destSimulator)) {
+			if (isSomethingWillBeEaten(sourceSimulator)
+					|| isSomethingWillBeEaten(destinationSimulator)) {
 				continue;
 			}
 
-			destiny.remove(toBeTransfer);
+			destination.remove(toBeTransfer);
 			source.add(toBeTransfer);
 
 			lastTransfer = toBeTransfer;
 		}
 	}
 
-	public void forward() {
+	private static void forward() {
 		source.remove(MAN);
-		destiny.add(MAN);
+		destination.add(MAN);
 
 		for (int i = 0; i < source.size(); i++) {
 			if (source.get(i).equals(lastTransfer)) {
@@ -72,25 +76,25 @@ public class WolfSheetCabbage {
 			}
 
 			ArrayList<String> sourceSimulator = new ArrayList<String>(source);
-			ArrayList<String> destSimulator = new ArrayList<String>(destiny);
+			ArrayList<String> destinationSimulator = new ArrayList<String>(destination);
 			String toBeTransfer = source.get(i);
 			sourceSimulator.remove(toBeTransfer);
-			destSimulator.add(toBeTransfer);
+			destinationSimulator.add(toBeTransfer);
 
-			if (isSomethingWillBeEatten(sourceSimulator)
-					|| isSomethingWillBeEatten(destSimulator)) {
+			if (isSomethingWillBeEaten(sourceSimulator)
+					|| isSomethingWillBeEaten(destinationSimulator)) {
 				continue;
 			}
 
 			source.remove(toBeTransfer);
-			destiny.add(toBeTransfer);
+			destination.add(toBeTransfer);
 
 			lastTransfer = toBeTransfer;
 			break;
 		}
 	}
 
-	public boolean isSomethingWillBeEatten(ArrayList<String> list) {
+	private static boolean isSomethingWillBeEaten(ArrayList<String> list) {
 		boolean wolfAndSheetTogether = list.contains(WOLF)
 				&& list.contains(SHEET);
 		boolean sheetAndCabbageTogether = list.contains(CABBAGE)
@@ -99,16 +103,16 @@ public class WolfSheetCabbage {
 				&& (wolfAndSheetTogether || sheetAndCabbageTogether);
 	}
 
-	public void printList(ArrayList<String> list) {
+	private static void printList(ArrayList<String> list) {
 		for (String currentStr : list) {
 			System.out.print(currentStr + ",");
 		}
 	}
 
-	public void printStatus() {
+	private static void printStatus() {
 		printList(source);
 		System.out.print("------");
-		printList(destiny);
+		printList(destination);
 		System.out.println("");
 	}
 
