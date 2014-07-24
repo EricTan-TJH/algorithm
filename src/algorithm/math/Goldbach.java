@@ -1,7 +1,7 @@
 package algorithm.math;
 
 /**
- * Ð´³öÒ»¸ö³ÌÐòÒÔÏÔÊ¾Ã¿¸ö´óÓÚ2µÄÅ¼ÕûÊý£¬±ÈÈç1000£¬ÊÇÁ½¸öÖÊÊýÖ®ºÍ¡£
+ * å†™å‡ºä¸€ä¸ªç¨‹åºä»¥æ˜¾ç¤ºæ¯ä¸ªå¤§äºŽ2çš„å¶æ•´æ•°ï¼Œæ¯”å¦‚1000ï¼Œæ˜¯ä¸¤ä¸ªè´¨æ•°ä¹‹å’Œã€‚
  * 
  * @author EricTan
  * 
